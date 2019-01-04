@@ -48,14 +48,24 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             email = open(path, "r")
 
             ### use parseOutText to extract the text from the opened email
+            text=parseOutText(email)
+
 
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
+            text=text.replace("sara","")
+            text=text.replace("shackleton","")
+            text=text.replace("chris","")
+            text=text.replace("germani","")
 
             ### append the text to word_data
+            word_data.append(text)
 
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
-
+            if(name=='sara'):
+                from_data.append(0)
+            else:
+                from_data.append(1)
 
             email.close()
 
@@ -63,13 +73,22 @@ print "emails processed"
 from_sara.close()
 from_chris.close()
 
+print "word_data[152]:"word_data[152]
+
 pickle.dump( word_data, open("your_word_data.pkl", "w") )
 pickle.dump( from_data, open("your_email_authors.pkl", "w") )
 
+#from nltk.corpus import stopwords
+#sw=stopwords.words("english")
+#for wordss in word_data:
+#    for i in sw:
+#        wordss.replace(i,"")
 
-
-
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+vectorizer=TfidVectorizer(stop_words='english')
+tfidf=vectorizer.fit_transform(word_data)
+print "Number of unique words: ",len(vectorizer.get_feature_names())
+print "Word number 34597: ",vectorizer.get_feature_names()[34597]
 ### in Part 4, do TfIdf vectorization here
 
 
